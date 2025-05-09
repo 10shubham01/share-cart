@@ -1,9 +1,8 @@
-name: CD
-
+name: main
 on:
-  push:
+  workflow_dispatch:
     branches:
-      - release-*
+      - main
 
 permissions:
   contents: write
