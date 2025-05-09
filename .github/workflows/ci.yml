@@ -16,6 +16,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Echo Actor Name
+        run: echo "${{github.actor}}"
+
       - name: Setup node
         uses: actions/setup-node@v3
         with:
