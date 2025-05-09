@@ -5,6 +5,9 @@ on:
     branches:
       - release-*
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -26,6 +29,9 @@ jobs:
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
+      - name: Echo Actor Name
+        run: echo "${{ github.actor }}"
+
       - name: Cache node_modules
         uses: actions/cache@v3
         id: yarn-cache
@@ -37,6 +43,13 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+
+      - name: Release
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+          yarn release
+          git push
 
       - name: => Run generate
         run: yarn generate
