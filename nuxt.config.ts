@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   modules: ['shadcn-nuxt', '@nuxtjs/color-mode'],
+  ssr:false,
   colorMode: {
     classSuffix: ''
   },
