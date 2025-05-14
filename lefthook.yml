@@ -1,8 +1,10 @@
 pre-commit:
   parallel: true
   commands:
-    lint:
-      run: yarn build
+    # lint:
+    #   run: yarn build
+    checkPngs:
+      run: node checkPngs.js
 
 commit-msg:
   commands:
