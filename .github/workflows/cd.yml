@@ -1,4 +1,5 @@
 name: main
+
 on:
   workflow_dispatch:
     branches:
@@ -16,26 +17,26 @@ jobs:
         node: [20]
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node }}
-      - name: installed github app
+      - name: Setup GitHub App Token
         uses: actions/create-github-app-token@v1
         id: app-token
         with:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
+      - name: Checkout with App Token
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - name: Echo Actor Name
-        run: echo "${{ github }}"
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
 
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -49,12 +50,19 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Release
+      - name: Configure Git Identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Release and Push
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "shubhamedu.01@gmail.com"
           yarn release
           git push
 
-      - name: => Run generate
+      - name: Run Generate
         run: yarn generate
