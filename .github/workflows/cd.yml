@@ -59,8 +59,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "shubhamedu.01@gmail.com"
+          git config user.name "BOT"
+          git config user.email "BOT.01@gmail.com"
           yarn release
           git push
 
