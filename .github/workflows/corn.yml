@@ -2,7 +2,7 @@ name: Run Every Minute
 
 on:
   schedule:
-    - cron: "* * * * *" # Runs every minute (UTC time)
+    - cron: "1 * * * *"
 
 jobs:
   run-every-minute:
