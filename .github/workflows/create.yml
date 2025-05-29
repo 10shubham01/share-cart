@@ -30,6 +30,8 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
+          git config user.name "bot-${{ github.actor }}"
+          git config user.email "bot-${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
           # Get current branch name
           BRANCH_NAME="${GITHUB_REF#refs/heads/}"
 
