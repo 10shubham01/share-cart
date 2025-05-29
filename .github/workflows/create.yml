@@ -3,7 +3,7 @@ name: Create Release PR
 on:
   push:
     branches:
-      - "*-release-*"
+      - release-*
 
 permissions:
   contents: write
