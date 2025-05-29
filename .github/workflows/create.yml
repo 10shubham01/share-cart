@@ -30,11 +30,32 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
+          # Get current branch name
           BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+
+          # Fetch the latest main branch for comparison
+          git fetch origin main
+
+          # Check if a PR is already open for this branch
+          if gh pr list --base main --head "$BRANCH_NAME" --state open | grep -q .; then
+            echo "PR already exists for branch $BRANCH_NAME. Exiting."
+            exit 0
+          fi
+
+          # Check if there are any changes against main
+          if git diff --quiet origin/main...HEAD; then
+            echo "No changes found against main. Exiting."
+            exit 0
+          fi
+
+          # Use the latest commit message for PR title and body
+          TITLE=$(git log -1 --pretty=%s)
+          BODY=$(git log -1 --pretty=%b)
+
           gh pr create \
             --base main \
             --head "$BRANCH_NAME" \
-            --title "Release: $BRANCH_NAME" \
-            --body "This is an automated release PR for **$BRANCH_NAME** , and this PR is raised via a voice command" \
+            --title "$TITLE" \
+            --body "$BODY" \
             --label release \
             --draft
