@@ -1,0 +1,12 @@
+name: Run Every Minute
+
+on:
+  schedule:
+    - cron: "* * * * *" # Runs every minute (UTC time)
+
+jobs:
+  run-every-minute:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print timestamp
+        run: echo "Running at $(date -u)"
