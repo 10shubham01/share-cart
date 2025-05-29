@@ -35,6 +35,6 @@ jobs:
             --base main \
             --head "$BRANCH_NAME" \
             --title "Release: $BRANCH_NAME" \
-            --body "This is an automated release PR for **$BRANCH_NAME**" \
+            --body "This is an automated release PR for **$BRANCH_NAME** , and this PR is raised via a voice command" \
             --label release \
             --draft
