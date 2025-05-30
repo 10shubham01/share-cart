@@ -1,5 +1,4 @@
-name: Run Every Minute
-
+name: Generate random number
 on:
   schedule:
     - cron: "*/5 * * * *"
