@@ -1,7 +1,8 @@
-name: main
+name: Deploy Nuxt Static Site
 
 on:
   workflow_dispatch:
+  push:
     branches:
       - main
 
@@ -59,5 +60,11 @@ jobs:
           yarn release
           git push
 
-      - name: Run Generate
+      - name: Run Nuxt Generate
         run: yarn generate
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
