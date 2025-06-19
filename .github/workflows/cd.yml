@@ -51,14 +51,14 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Release and Push
-        env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
-          yarn release
-          git push
+      # - name: Release and Push
+      #   env:
+      #     GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+      #   run: |
+      #     git config user.name "${{ github.actor }}"
+      #     git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+      #     yarn release
+      #     git push
 
       - name: Run Nuxt Generate
         run: yarn generate
