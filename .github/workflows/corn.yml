@@ -44,8 +44,12 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Generate number
-        run: node generate.mjs
+      - name: Generate number 10 times
+        run: |
+          for i in {1..10}; do
+            echo "Run #$i"
+            node generate.mjs
+          done
       - name: Commit and Push Changes
         run: |
           git config user.name "${{ github.actor }}"
