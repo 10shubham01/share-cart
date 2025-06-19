@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.8 (2025-06-19)
+
+
+### Bug Fixes
+
+* fix ([0985b6b](https://github.com/10shubham01/share-cart/commit/0985b6ba1aa2983c416d2b2d1f3c76c1a185e76e))
+
 ### 0.0.7 (2025-05-28)
 
 ### 0.0.6 (2025-05-28)
