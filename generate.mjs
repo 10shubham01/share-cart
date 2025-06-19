@@ -63,7 +63,7 @@ for (const entry of repeated) {
 
 // Save
 const buffer = canvas.toBuffer('image/png');
-const filename = `output-${new Date().toISOString().split('T')[0]}.png`;
+const filename = `output-${new Date().toISOString()}.png`;
 await writeFile(`${outputDir}/${filename}`, buffer);
 console.log(`Image saved as ${filename}`);
 
