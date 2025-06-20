@@ -1,14 +1,19 @@
-// generateImage.ts
 import { readFile, writeFile } from 'fs/promises';
 import { existsSync, mkdirSync } from 'fs';
 import { createCanvas } from 'canvas';
+import { exec } from 'child_process';
 
+// Paths
 const filePath = './public/random.json';
 const outputDir = './public/images';
+const videoDir = './public/video';
+const videoOutputPath = `${videoDir}/output.mp4`;
 
+// Create directories if not exist
 if (!existsSync(outputDir)) mkdirSync(outputDir, { recursive: true });
+if (!existsSync(videoDir)) mkdirSync(videoDir, { recursive: true });
 
-// Read data
+// Read existing numbers
 let numbers = [];
 if (existsSync(filePath)) {
   const fileContent = await readFile(filePath, 'utf-8');
@@ -20,7 +25,7 @@ if (existsSync(filePath)) {
   }
 }
 
-// Add new number
+// Add a new random number with timestamp
 const newNumber = {
   number: Math.floor(Math.random() * 10000),
   timestamp: new Date().toISOString(),
@@ -28,7 +33,7 @@ const newNumber = {
 numbers.push(newNumber);
 await writeFile(filePath, JSON.stringify(numbers, null, 2));
 
-// Filter repeated
+// Group and find repeated numbers
 const grouped = numbers.reduce((acc, item) => {
   acc[item.number] = acc[item.number] || [];
   acc[item.number].push(item.timestamp);
@@ -44,12 +49,13 @@ const repeated = Object.entries(grouped)
     hue: Math.abs(hashCode(num)) % 360,
   }));
 
-// Draw to canvas
+// Create canvas
 const canvas = createCanvas(1200, 800);
 const ctx = canvas.getContext('2d');
 ctx.fillStyle = 'black';
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+// Draw abstract circles
 for (const entry of repeated) {
   const x = 10 + Math.random() * (canvas.width - 20);
   const y = 10 + Math.random() * (canvas.height - 20);
@@ -61,17 +67,31 @@ for (const entry of repeated) {
   ctx.fill();
 }
 
-// Save
-const buffer = canvas.toBuffer('image/png');
-const filename = `output-${new Date().toISOString()}.png`;
-await writeFile(`${outputDir}/${filename}`, buffer);
-console.log(`Image saved as ${filename}`);
+// Save image to disk
+const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+const filename = `output-${timestamp}.png`;
+await writeFile(`${outputDir}/${filename}`, canvas.toBuffer('image/png'));
+console.log(`✅ Image saved: ${filename}`);
+
+// Generate video using FFmpeg
+generateVideoFromImages();
 
 function hashCode(str) {
   let hash = 0;
-  const s = String(str);
-  for (let i = 0; i < s.length; i++) {
-    hash = s.charCodeAt(i) + ((hash << 5) - hash);
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
   }
   return hash;
+}
+
+function generateVideoFromImages() {
+  const ffmpegCmd = `ffmpeg -y -framerate 60 -pattern_type glob -i '${outputDir}/output-*.png' -c:v libx264 -pix_fmt yuv420p ${videoOutputPath}`;
+
+  exec(ffmpegCmd, (err, stdout, stderr) => {
+    if (err) {
+      console.error('❌ Error generating video:', err.message);
+      return;
+    }
+    console.log('🎬 Video created:', videoOutputPath);
+  });
 }
