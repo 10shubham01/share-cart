@@ -4,10 +4,11 @@
     <main>
       <slot />
     </main>
-    <BottomNavigation />
+    <BottomNavigation v-if="user" />
   </UApp>
 </template>
 
 <script setup lang="ts">
 import AppHeader from '~/components/AppHeader.vue'
+const user = useSupabaseUser()
 </script>

@@ -16,7 +16,7 @@ export default defineAppConfig({
   oauth: {
     redirectUrl:
       process.env.NODE_ENV === "production"
-        ? "https://yourdomain.com/confirm"
+        ? "https://share-cart-two.vercel.app/confirm"
         : "http://localhost:3000/confirm",
   },
 });
