@@ -60,7 +60,7 @@ const handleGoogleSignIn = async () => {
             {{ isSignUp ? 'Create Account' : 'Welcome Back' }}
           </h1>
           <p class="text-gray-600 mt-2">
-            {{ isSignUp ? 'Join us to start tracking your group expenses' : 'Sign in to your account' }}
+            {{ isSignUp ? 'Join us to start tracking your group expense' : 'Sign in to your account' }}
           </p>
         </div>
       </template>
