@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
 
   if (method === 'POST') {
     const body = await readBody(event)
-    const { name, unit, default_price, category_id, description } = body
+    const { name, unit, default_price, image_url } = body
 
     if (!name || !unit) {
       throw createError({ statusCode: 400, statusMessage: 'Name and unit are required' })
@@ -37,8 +37,8 @@ export default defineEventHandler(async (event) => {
       .insert({
         name,
         unit,
-        default_price: default_price || 0,
-        description,
+        default_price: default_price || null,
+        image_url: image_url || null,
         created_by: user.id
       })
       .select()

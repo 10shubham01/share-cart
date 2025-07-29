@@ -46,7 +46,7 @@ const indicatorStyle = computed(() => {
                     <i class="icon">
                         <UIcon :name="item.icon" class="w-6 h-6" />
                     </i>
-                    <span class="text">{{ item.label }}</span>
+                    <span class="text font-bold">{{ item.label }}</span>
                 </a>
             </li>
             <li class="indicator" :style="indicatorStyle"></li>
@@ -118,7 +118,7 @@ const indicatorStyle = computed(() => {
 .text {
     position: absolute;
     color: #fff;
-    font-weight: 400;
+    font-weight: 600;
     letter-spacing: 0.05em;
     transition: 0.5s;
     transform: translateY(20px);
