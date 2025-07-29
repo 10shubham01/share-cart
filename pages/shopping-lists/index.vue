@@ -5,11 +5,7 @@ const { user } = useAuth()
 const toast = useToast()
 
 // Redirect to login if not authenticated
-onMounted(() => {
-  if (!user.value) {
-    navigateTo('/login')
-  }
-})
+
 
 const shoppingLists = ref<Database['public']['Tables']['shopping_lists']['Row'][]>([])
 const loading = ref(false)
@@ -104,7 +100,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="user" class="min-h-screen bg-gray-50">
+  <div v-if="user" class="min-h-screen ">
     <UContainer class="py-8">
       <!-- Header -->
       <div class="flex items-center justify-between mb-8">

@@ -53,7 +53,7 @@ const handleGoogleSignIn = async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+  <div class="min-h-screen flex items-center justify-center p-4">
     <UCard class="w-full max-w-md">
       <template #header>
         <div class="text-center">

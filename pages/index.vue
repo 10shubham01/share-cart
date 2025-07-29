@@ -3,12 +3,6 @@ import type { Database } from '~/types/database.types'
 
 const { user } = useAuth()
 
-onMounted(() => {
-  if (!user.value) {
-    navigateTo('/login')
-  }
-})
-
 const stats = ref<{
   totalExpenses: number
   totalGroups: number
@@ -53,7 +47,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="user" class="min-h-screen bg-gray-50">
+  <div v-if="user" class="min-h-screen ">
     <UContainer class="py-8">
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>

@@ -17,6 +17,6 @@ export default defineAppConfig({
     redirectUrl:
       process.env.NODE_ENV === "production"
         ? "https://yourdomain.com/confirm"
-        : "http://localhost:3008/confirm",
+        : "http://localhost:3000/confirm",
   },
 });
