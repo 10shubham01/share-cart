@@ -2,6 +2,21 @@
 import type { Database } from '~/types/database.types'
 
 const { user } = useAuth()
+const userLoading = ref(true)
+
+// Wait for user to be hydrated
+watch(user, (newUser) => {
+  if (newUser !== null) {
+    userLoading.value = false
+  }
+}, { immediate: true })
+
+// Also check after a timeout in case user is already loaded
+onMounted(() => {
+  setTimeout(() => {
+    userLoading.value = false
+  }, 1000)
+})
 
 const stats = ref<{
   totalExpenses: number
@@ -24,16 +39,16 @@ const fetchDashboardData = async () => {
   loading.value = true
   try {
     const [statsData, groupsData, expensesData, listsData] = await Promise.all([
-      useFetch('/api/dashboard/stats'),
-      useFetch('/api/dashboard/recent-groups'),
-      useFetch('/api/dashboard/recent-expenses'),
-      useFetch('/api/dashboard/recent-shopping-lists')
+      $fetch('/api/dashboard/stats'),
+      $fetch('/api/dashboard/recent-groups'),
+      $fetch('/api/dashboard/recent-expenses'),
+      $fetch('/api/dashboard/recent-shopping-lists')
     ])
 
-    if (statsData.data.value) stats.value = statsData.data.value
-    if (groupsData.data.value) recentGroups.value = groupsData.data.value
-    if (expensesData.data.value) recentExpenses.value = expensesData.data.value
-    if (listsData.data.value) recentShoppingLists.value = listsData.data.value
+    if (statsData) stats.value = statsData
+    if (groupsData) recentGroups.value = groupsData
+    if (expensesData) recentExpenses.value = expensesData
+    if (listsData) recentShoppingLists.value = listsData
   } catch (error: any) {
     console.error('Error fetching dashboard data:', error)
   } finally {
@@ -47,7 +62,33 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="user" class="min-h-screen ">
+  <!-- Loading state while user is being hydrated -->
+  <div v-if="userLoading" class="min-h-screen flex items-center justify-center">
+    <div class="text-center">
+      <UIcon name="i-lucide-loader-2" class="w-8 h-8 animate-spin mx-auto mb-4" />
+      <p class="text-gray-600">Loading...</p>
+    </div>
+  </div>
+
+  <!-- Show login page if no user after hydration -->
+  <div v-else-if="!user" class="min-h-screen flex items-center justify-center p-4">
+    <UCard class="w-full max-w-md">
+      <template #header>
+        <div class="text-center">
+          <h1 class="text-2xl font-bold text-gray-900">Welcome</h1>
+          <p class="text-gray-600 mt-2">Please sign in to continue</p>
+        </div>
+      </template>
+      <div class="text-center">
+        <UButton to="/login" color="primary" size="lg">
+          Sign In
+        </UButton>
+      </div>
+    </UCard>
+  </div>
+
+  <!-- Show dashboard if user is authenticated -->
+  <div v-else class="min-h-screen">
     <UContainer class="py-8">
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>

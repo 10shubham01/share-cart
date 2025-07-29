@@ -2,7 +2,6 @@
 const toast = useToast()
 const loading = ref(false)
 const isSignUp = ref(false)
-
 const form = ref({
   email: '',
   password: '',

@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
   compatibilityDate: '2025-05-15',
-  ssr:false,
+  // ssr:true,
   eslint: {
     config: {
       stylistic: true,
