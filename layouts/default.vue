@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <UApp class="min-h-screen bg-gray-50">
     <AppHeader />
     <main>
       <slot />
     </main>
-  </div>
+  </UApp>
 </template>

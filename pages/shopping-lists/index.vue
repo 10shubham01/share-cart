@@ -29,12 +29,12 @@ const fetchShoppingLists = async () => {
   try {
     const { data, error } = await useFetch('/api/shopping-lists')
     if (error.value) {
-      toast.add({ title: 'Error', description: error.value.message, color: 'red' })
+      toast.add({ title: 'Error', description: error.value.message, color: 'error' })
     } else if (data.value) {
       shoppingLists.value = data.value
     }
   } catch (error: any) {
-    toast.add({ title: 'Error', description: error.message, color: 'red' })
+    toast.add({ title: 'Error', description: error.message, color: 'error' })
   } finally {
     loading.value = false
   }
@@ -53,7 +53,7 @@ const fetchGroups = async () => {
 
 const createShoppingList = async () => {
   if (!newList.value.name.trim()) {
-    toast.add({ title: 'Error', description: 'List name is required', color: 'red' })
+    toast.add({ title: 'Error', description: 'List name is required', color: 'error' })
     return
   }
 
@@ -64,15 +64,15 @@ const createShoppingList = async () => {
     })
 
     if (error.value) {
-      toast.add({ title: 'Error', description: error.value.message, color: 'red' })
+      toast.add({ title: 'Error', description: error.value.message, color: 'error' })
     } else if (data.value) {
       shoppingLists.value.unshift(data.value)
       showCreateModal.value = false
       newList.value = { name: '', group_id: null }
-      toast.add({ title: 'Success', description: 'Shopping list created successfully!', color: 'green' })
+      toast.add({ title: 'Success', description: 'Shopping list created successfully!', color: 'success' })
     }
   } catch (error: any) {
-    toast.add({ title: 'Error', description: error.message, color: 'red' })
+    toast.add({ title: 'Error', description: error.message, color: 'error' })
   }
 }
 
@@ -87,13 +87,13 @@ const deleteShoppingList = async (listId: string) => {
     })
 
     if (error.value) {
-      toast.add({ title: 'Error', description: error.value.message, color: 'red' })
+      toast.add({ title: 'Error', description: error.value.message, color: 'success' })
     } else {
       shoppingLists.value = shoppingLists.value.filter(l => l.id !== listId)
-      toast.add({ title: 'Success', description: 'Shopping list deleted successfully!', color: 'green' })
+      toast.add({ title: 'Success', description: 'Shopping list deleted successfully!', color: 'success' })
     }
   } catch (error: any) {
-    toast.add({ title: 'Error', description: error.message, color: 'red' })
+    toast.add({ title: 'Error', description: error.message, color: 'error' })
   }
 }
 

@@ -15,7 +15,7 @@ export default defineAppConfig({
   },
   oauth: {
     redirectUrl: process.env.NODE_ENV === 'production'
-      ? 'https://yourdomain.com/auth/callback'
-      : 'http://localhost:3000/auth/callback'
+      ? 'https://yourdomain.com/confirm'
+      : 'http://localhost:3008/confirm'
   }
 })

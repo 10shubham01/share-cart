@@ -14,15 +14,9 @@ export default defineEventHandler(async (event) => {
   if (method === 'GET') {
     const { data: items, error } = await supabase
       .from('grocery_items')
-      .select(`
-        *,
-        category:categories (
-          id,
-          name
-        )
-      `)
+      .select('*')
+      .or(`created_by.eq.${user.id},created_by.is.null`)
       .order('name', { ascending: true })
-
     if (error) {
       throw createError({ statusCode: 500, statusMessage: error.message })
     }
@@ -44,7 +38,6 @@ export default defineEventHandler(async (event) => {
         name,
         unit,
         default_price: default_price || 0,
-        category_id,
         description,
         created_by: user.id
       })
