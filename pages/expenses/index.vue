@@ -128,7 +128,7 @@ onMounted(() => {
         <UIcon name="i-lucide-loader-2" class="w-8 h-8 animate-spin" />
       </div>
 
-      <div v-else-if="expenses.length > 0" class="space-y-4">
+      <div v-else-if="expenses.length > 0" class="space-y-4" v-auto-animate>
         <UCard v-for="expense in expenses" :key="expense.id" class="hover:shadow-lg transition-shadow">
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-4">

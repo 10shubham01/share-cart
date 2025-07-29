@@ -1,3 +1,4 @@
+const NUXT_PUBLIC_REDIRECT_URL = (import.meta as any).PUBLIC_REDIRECT_URL;
 export default defineAppConfig({
   ui: {
     colors: {
@@ -41,6 +42,6 @@ export default defineAppConfig({
     }
   },
   oauth: {
-    redirectUrl: "https://share-cart-two.vercel.app/confirm"
+    redirectUrl: NUXT_PUBLIC_REDIRECT_URL ? NUXT_PUBLIC_REDIRECT_URL : 'https://share-cart-two.vercel.app/confirm'
   },
 });

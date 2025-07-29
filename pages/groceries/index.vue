@@ -19,7 +19,8 @@
       <p class="text-gray-600">Get started by adding your first grocery item.</p>
     </div>
     <div v-else-if="viewMode === 'grid'"
-      class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-10 gap-3 sm:gap-4">
+      class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-10 gap-3 sm:gap-4"
+      v-auto-animate>
       <UCard v-for="item in groceries" :key="item.id" :class="[
         'bg-primary-100/25  p-1 shadow-primary-100/50 !shadow-inner hover:shadow-primary-500/75 transition-all duration-200 cursor-pointer aspect-square relative overflow-visible',
         selectedItems.includes(item.id) ? 'ring-2 ring-primary  shadow-primary-100/50 !shadow-inner' : ''
@@ -50,7 +51,7 @@
     </div>
 
     <!-- List View -->
-    <div v-else class="space-y-3">
+    <div v-else class="space-y-3" v-auto-animate>
       <UCard v-for="item in groceries" :key="item.id" :class="[
         'bg-primary-100/25  p-1 shadow-primary-100/50 !shadow-inner hover:shadow-md transition-all hover:shadow-primary-500/75 duration-200 cursor-pointer relative',
         selectedItems.includes(item.id) ? 'ring-2 ring-primary  shadow-primary-100/50 !shadow-inner' : ''

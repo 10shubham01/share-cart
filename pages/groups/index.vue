@@ -105,7 +105,7 @@ onMounted(() => {
         <UIcon name="i-lucide-loader-2" class="w-8 h-8 animate-spin" />
       </div>
 
-      <div v-else-if="groups.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div v-else-if="groups.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" v-auto-animate>
         <UCard v-for="group in groups" :key="group.id" class="hover:shadow-lg transition-shadow">
           <template #header>
             <div class="flex items-center justify-between">
