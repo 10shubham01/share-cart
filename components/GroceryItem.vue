@@ -12,8 +12,15 @@
 
 
                 <UFormField label="Default Price" name="default_price">
-                    <UInputNumber v-model="form.default_price" placeholder="0.00" :min="0" :step="0.01"
-                        :error="errors.default_price" />
+                    <UInputNumber v-model="form.default_price" :increment="{
+                        color: 'primary',
+                        variant: 'solid',
+                        size: 'xs'
+                    }" :decrement="{
+                        color: 'primary',
+                        variant: 'solid',
+                        size: 'xs'
+                    }" placeholder="Enter Price" :min="0" :step="1" :error="errors.default_price" />
                 </UFormField>
 
                 <UFormField label="Unit" name="unit" required>
@@ -72,6 +79,7 @@ const model = defineModel<boolean>({
 // Reactive state
 const loading = ref(false)
 const errors = ref<Record<string, string>>({})
+const user = useSupabaseUser()
 
 // Form data
 const form = ref<GroceryItemInsert>({
@@ -144,7 +152,7 @@ const handleSubmit = async () => {
 
         if (isEditing.value && props.item) {
             // Update existing item
-            const { data, error } = await $fetch(`/api/grocery-items/${props.item.id}`, {
+            result = await $fetch(`/api/grocery-items/${props.item.id}`, {
                 method: 'PUT',
                 body: {
                     name: form.value.name,
@@ -153,23 +161,31 @@ const handleSubmit = async () => {
                     image_url: form.value.image_url
                 }
             })
-
-            if (error) throw new Error(error.message)
-            result = data
         } else {
             // Create new item
-            const { data, error } = await $fetch('/api/grocery-items', {
+            result = await $fetch('/api/grocery-items', {
                 method: 'POST',
                 body: {
                     name: form.value.name,
                     default_price: form.value.default_price,
                     unit: form.value.unit,
-                    image_url: form.value.image_url
+                    image_url: form.value.image_url,
+                    created_by: user.value?.id ?? null
                 }
             })
+        }
 
-            if (error) throw new Error(error.message)
-            result = data
+        // Log the result for debugging
+        console.log('API Response:', result)
+
+        // Validate result before emitting
+        if (!result || typeof result !== 'object') {
+            throw new Error('Invalid response from server')
+        }
+
+        // Ensure result has required properties
+        if (!result.id || !result.name) {
+            throw new Error('Invalid item data received from server')
         }
 
         // Emit success event
@@ -183,7 +199,14 @@ const handleSubmit = async () => {
 
     } catch (error: any) {
         console.error('Error saving grocery item:', error)
-        // You might want to show a toast notification here
+
+        // Show error toast
+        const toast = useToast()
+        toast.add({
+            title: 'Error',
+            description: error.message || 'Failed to save grocery item',
+            color: 'error'
+        })
     } finally {
         loading.value = false
     }

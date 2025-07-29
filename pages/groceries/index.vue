@@ -84,7 +84,7 @@
     <div
       class="fixed bottom-28 flex flex-col justify-between items-center gap-4 right-0  bg-primary-100/25 rounded-l-2xl p-1 shadow-primary-100/50 !shadow-inner">
       <div class="flex items-center gap-2  rounded-lg p-1 flex-col">
-        <UButton variant="ghost" size="sm" @click="showAddModal = !showAddModal" icon="i-heroicons-plus">
+        <UButton variant="ghost" size="md" @click="showAddModal = !showAddModal" icon="i-heroicons-plus">
         </UButton>
         <UButton :variant="isEditMode ? 'solid' : 'ghost'" size="sm" @click="toggleEditMode" icon="i-lucide-cog">
         </UButton>
