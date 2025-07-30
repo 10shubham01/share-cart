@@ -1,40 +1,114 @@
 <template>
-  <div class="container mx-auto px-4 py-8">
-    <!-- Header -->
-    <div class="mb-8">
-      <div class="flex items-center justify-between">
-        <div>
-          <h1 class="text-3xl font-bold text-gray-900 mb-2">Grocery Items</h1>
-          <p class="text-gray-600">Browse and split grocery items</p>
+  <div class="relative">
+    <div
+      class="sticky top-0 z-50 bg-gradient-to-r from-white via-white to-primary-50/30 backdrop-blur-md border-b border-gray-200/50 py-6 w-full shadow-sm">
+      <div class="flex justify-between flex-col sm:flex-row px-4 max-w-7xl mx-auto">
+        <div class="flex-1">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="p-2 bg-primary-100 rounded-xl">
+              <UIcon name="i-heroicons-shopping-bag" class="h-6 w-6 text-primary-600" />
+            </div>
+            <div>
+              <h1
+                class="text-3xl font-bold bg-gradient-to-r from-gray-900 to-primary-700 bg-clip-text text-transparent">
+                Grocery Items
+              </h1>
+              <p class="text-gray-600 text-sm font-medium">Browse and split grocery items</p>
+            </div>
+          </div>
+
+          <div class="relative max-w-md">
+            <UInput v-model="searchQuery" placeholder="Search items, units, or prices..."
+              leading-icon="i-heroicons-magnifying-glass">
+              <template #trailing>
+                <UIcon v-if="searchQuery" name="i-heroicons-x-mark" @click="searchQuery = ''" />
+              </template>
+            </UInput>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 mt-4 sm:mt-0">
+          <UButton color="primary" variant="solid" size="lg" @click="showAddModal = !showAddModal"
+            icon="i-heroicons-plus"
+            class="shadow-lg hover:shadow-xl transition-all duration-300 font-semibold px-6 rounded-xl hover:scale-105">
+            Add Item
+          </UButton>
+
+          <UButton :variant="isEditMode ? 'solid' : 'outline'" :color="isEditMode ? 'primary' : 'neutral'" size="lg"
+            @click="toggleEditMode" icon="i-lucide-cog"
+            class="shadow-md hover:shadow-lg transition-all duration-300 rounded-xl hover:scale-105">
+            {{ isEditMode ? 'Done' : 'Edit' }}
+          </UButton>
+
+          <div
+            class="flex items-center bg-white/80 backdrop-blur-sm rounded-xl p-1.5 shadow-lg border border-gray-200/50">
+            <UButton :variant="viewMode === 'grid' ? 'solid' : 'ghost'"
+              :color="viewMode === 'grid' ? 'primary' : 'neutral'" size="sm" @click="viewMode = 'grid'"
+              class="rounded-lg transition-all duration-300 hover:scale-105">
+              <UIcon name="i-heroicons-squares-2x2" class="h-4 w-4" />
+            </UButton>
+            <UButton :variant="viewMode === 'list' ? 'solid' : 'ghost'"
+              :color="viewMode === 'list' ? 'primary' : 'neutral'" size="sm" @click="viewMode = 'list'"
+              class="rounded-lg transition-all duration-300 hover:scale-105">
+              <UIcon name="i-heroicons-list-bullet" class="h-4 w-4" />
+            </UButton>
+          </div>
         </div>
       </div>
     </div>
-    <div v-if="loading" class="flex justify-center items-center py-12">
-      <UIcon name="i-heroicons-arrow-path" class="animate-spin h-8 w-8 text-primary" />
-      <span class="ml-2 text-gray-600">Loading grocery items...</span>
+  </div>
+  <div class="pt-8">
+    <div v-if="loading" class="px-4">
+      <div v-if="viewMode === 'grid'"
+        class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-10 gap-3 sm:gap-4">
+        <div v-for="i in 12" :key="i"
+          class="aspect-square bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl animate-pulse shadow-lg">
+          <div class="h-full flex flex-col justify-center items-center p-4">
+            <div class="w-16 h-4 bg-gray-400 rounded mb-3 animate-pulse"></div>
+            <div class="w-12 h-3 bg-gray-400 rounded animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+      <div v-else class="space-y-3">
+        <div v-for="i in 6" :key="i"
+          class="bg-gradient-to-r from-gray-200 to-gray-300 rounded-xl p-4 animate-pulse shadow-lg">
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <div class="w-32 h-5 bg-gray-400 rounded mb-2 animate-pulse"></div>
+              <div class="w-24 h-4 bg-gray-400 rounded animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div v-else-if="groceries.length === 0" class="text-center py-12">
-      <UIcon name="i-heroicons-shopping-bag" class="h-12 w-12 text-gray-400 mx-auto mb-4" />
-      <h3 class="sm:text-lg text-xs font-semibold text-gray-900 mb-2">No Grocery Items</h3>
-      <p class="text-gray-600">Get started by adding your first grocery item.</p>
+    <div v-else-if="displayGroceries.length === 0" class="text-center py-12 px-4">
+      <div v-if="searchQuery" class="space-y-4">
+        <UIcon name="i-heroicons-magnifying-glass" class="h-16 w-16 text-gray-400 mx-auto" />
+        <h3 class="text-xl font-semibold text-gray-900">No items found</h3>
+        <p class="text-gray-600">Try adjusting your search terms or browse all items</p>
+        <UButton @click="searchQuery = ''" color="primary" variant="outline">
+          Clear Search
+        </UButton>
+      </div>
+      <div v-else class="space-y-4">
+        <UIcon name="i-heroicons-shopping-bag" class="h-16 w-16 text-gray-400 mx-auto" />
+        <h3 class="text-xl font-semibold text-gray-900">No Grocery Items</h3>
+        <p class="text-gray-600">Get started by adding your first grocery item</p>
+        <UButton @click="showAddModal = true" color="primary">
+          <UIcon name="i-heroicons-plus" class="h-4 w-4 mr-2" />
+          Add First Item
+        </UButton>
+      </div>
     </div>
     <div v-else-if="viewMode === 'grid'"
-      class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-10 gap-3 sm:gap-4"
+      class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-10 gap-3 sm:gap-4 px-4"
       v-auto-animate>
-      <UCard v-for="item in groceries" :key="item.id" :class="[
+      <UCard v-for="item in displayGroceries" :key="item.id" :class="[
         'bg-primary-100/25  p-1 shadow-primary-100/50 !shadow-inner hover:shadow-primary-500/75 transition-all duration-200 cursor-pointer aspect-square relative overflow-visible',
         selectedItems.includes(item.id) ? 'ring-2 ring-primary  shadow-primary-100/50 !shadow-inner' : ''
       ]" @click="toggleSelection(item.id)">
         <div class="h-full flex flex-col">
           <div class="flex-1 flex flex-col justify-center text-center">
-            <!-- Edit/Delete Icons (shown in edit mode) -->
-            <div v-if="isEditMode" class="absolute -top-0 left-0 flex gap-1 w-full  flex justify-between">
-              <UButton size="xs" color="primary" variant="ghost" icon="i-heroicons-pencil-square"
-                @click.stop="editItem(item)" />
-              <UButton size="xs" color="error" variant="ghost" icon="i-heroicons-trash"
-                @click.stop="deleteItem(item)" />
-            </div>
-
             <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 leading-tight">
               {{ item.name }}
             </h3>
@@ -46,20 +120,29 @@
               </div>
             </div>
           </div>
+
+          <div v-if="isEditMode"
+            class="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-gray-200 rounded-b-lg p-2 transform transition-all duration-300 ease-out"
+            :class="isEditMode ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'">
+            <div class="flex justify-between w-full gap-2">
+              <UButton size="xs" color="primary" variant="solid" icon="i-heroicons-pencil-square"
+                class="shadow-sm hover:shadow-md transition-shadow" @click.stop="editItem(item)" />
+              <UButton size="xs" color="error" variant="solid" icon="i-heroicons-trash"
+                class="shadow-sm hover:shadow-md transition-shadow" @click.stop="deleteItem(item)" />
+            </div>
+          </div>
         </div>
       </UCard>
     </div>
 
     <!-- List View -->
-    <div v-else class="space-y-3" v-auto-animate>
-      <UCard v-for="item in groceries" :key="item.id" :class="[
+    <div v-else class="space-y-3 px-4" v-auto-animate>
+      <UCard v-for="item in displayGroceries" :key="item.id" :class="[
         'bg-primary-100/25  p-1 shadow-primary-100/50 !shadow-inner hover:shadow-md transition-all hover:shadow-primary-500/75 duration-200 cursor-pointer relative',
         selectedItems.includes(item.id) ? 'ring-2 ring-primary  shadow-primary-100/50 !shadow-inner' : ''
       ]" @click="toggleSelection(item.id)">
         <div class="flex items-center justify-between">
-          <!-- Selection Indicator -->
           <div class="flex items-center gap-4">
-            <!-- Item Info -->
             <div class="flex-1">
               <h3 class="text-lg font-semibold text-gray-900 mb-1">
                 {{ item.name }}
@@ -71,37 +154,29 @@
               </div>
             </div>
           </div>
-          <!-- Edit/Delete Icons (shown in edit mode) -->
-          <div v-if="isEditMode" class="absolute -top-0 right-2 flex gap-1 h-full flex flex-col justify-between py-1">
-            <UButton size="xs" color="primary" variant="ghost" icon="i-heroicons-pencil-square"
-              @click.stop="editItem(item)" />
-            <UButton size="xs" color="error" variant="ghost" icon="i-heroicons-trash" @click.stop="deleteItem(item)" />
+        </div>
+
+        <div v-if="isEditMode"
+          class="absolute bottom-0  right-0 bg-white/20 backdrop-blur-sm border-t border-gray-200 rounded-b-lg p-2 transform transition-all duration-300 ease-out flex flex-col h-full justify-between"
+          :class="isEditMode ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'">
+          <div class="flex flex-col justify-between gap-2 h-full">
+            <UButton size="xs" color="primary" variant="solid" icon="i-heroicons-pencil-square"
+              class="shadow-sm hover:shadow-md transition-shadow" @click.stop="editItem(item)" />
+            <UButton size="xs" color="error" variant="solid" icon="i-heroicons-trash"
+              class="shadow-sm hover:shadow-md transition-shadow" @click.stop="deleteItem(item)" />
           </div>
         </div>
       </UCard>
 
     </div>
-    <!-- Footer Items -->
-    <div
-      class="fixed bottom-28 flex flex-col justify-between items-center gap-4 right-0  bg-primary-100/25 rounded-l-2xl p-1 shadow-primary-100/50 !shadow-inner">
-      <div class="flex items-center gap-2  rounded-lg p-1 flex-col">
-        <UButton variant="ghost" size="md" @click="showAddModal = !showAddModal" icon="i-heroicons-plus">
-        </UButton>
-        <UButton :variant="isEditMode ? 'solid' : 'ghost'" size="sm" @click="toggleEditMode" icon="i-lucide-cog">
-        </UButton>
-        <UButton :variant="viewMode === 'grid' ? 'solid' : 'ghost'" size="sm" @click="viewMode = 'grid'" class="px-3">
-          <UIcon name="i-heroicons-squares-2x2" class="h-4 w-4" />
-        </UButton>
-        <UButton :variant="viewMode === 'list' ? 'solid' : 'ghost'" size="sm" @click="viewMode = 'list'" class="px-3">
-          <UIcon name="i-heroicons-list-bullet" class="h-4 w-4" />
-        </UButton>
-      </div>
-      <USeparator></USeparator>
-      <UButton color="primary" variant="ghost" icon="i-lucide-share">
-        <span class="min-w-4"> {{ selectedItems.length }}</span>
-      </UButton>
-    </div>
   </div>
+
+  <div class="fixed bottom-38 right-2 z-50">
+    <UButton color="primary" size="xl" icon="i-lucide-share">
+      <span class="font-medium">{{ selectedItems.length }}</span>
+    </UButton>
+  </div>
+
   <GroceryItem v-model="showAddModal" :item="editingItem" @saved="handleItemSaved" @cancelled="handleCancelled" />
 </template>
 
@@ -109,6 +184,7 @@
 import type { Database } from '~/types/database.types';
 
 const groceries = ref<Database['public']['Tables']['grocery_items']['Row'][]>([])
+const filteredGroceries = ref<Database['public']['Tables']['grocery_items']['Row'][]>([])
 const loading = ref(false);
 const error = ref<string | null>(null);
 const showAddModal = ref(false);
@@ -116,11 +192,35 @@ const editingItem = ref<Database['public']['Tables']['grocery_items']['Row'] | n
 const selectedItems = ref<string[]>([]);
 const viewMode = ref<'grid' | 'list'>('grid');
 const isEditMode = ref(false);
+const searchQuery = ref('')
+
+// Computed properties
+const displayGroceries = computed(() => {
+  if (searchQuery.value.trim()) {
+    return filteredGroceries.value
+  }
+  return groceries.value
+})
 
 // Format price to 2 decimal places
 const formatPrice = (price: number) => {
   return price.toFixed(2);
 };
+
+// Search functionality
+const performSearch = () => {
+  if (!searchQuery.value.trim()) {
+    filteredGroceries.value = groceries.value
+    return
+  }
+
+  const query = searchQuery.value.toLowerCase().trim()
+  filteredGroceries.value = groceries.value.filter(item =>
+    item.name.toLowerCase().includes(query) ||
+    item.unit.toLowerCase().includes(query) ||
+    (item.default_price && item.default_price.toString().includes(query))
+  )
+}
 
 async function fecthGrocery() {
   loading.value = true;
@@ -133,6 +233,7 @@ async function fecthGrocery() {
 
     if (data.value) {
       groceries.value = data.value;
+      filteredGroceries.value = data.value;
     }
   } catch (err: any) {
     error.value = err.message || 'Failed to load grocery items';
@@ -216,19 +317,12 @@ async function deleteItem(item: Database['public']['Tables']['grocery_items']['R
   }
 }
 
+// Watch for search query changes
+watch(searchQuery, () => {
+  performSearch()
+})
+
 onMounted(async () => {
   await fecthGrocery();
 });
 </script>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>

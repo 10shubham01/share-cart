@@ -13,10 +13,10 @@ export const useAuth = () => {
   const toast = useToast()
 
   const generateUsername = (email: string, fullName?: string) => {
-    const base = fullName 
+    const base = fullName
       ? fullName.toLowerCase().replace(/[^a-z0-9]/g, '')
       : email.split('@')[0]
-    
+
     const timestamp = Date.now().toString().slice(-4)
     return `${base}${timestamp}`
   }
@@ -51,11 +51,11 @@ export const useAuth = () => {
 
   const signInWithGoogle = async () => {
     const config = useAppConfig()
-    
+
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: config.oauth.redirectUrl,
+        redirectTo: 'http://localhost:3000/confirm',
       },
     })
 
@@ -80,7 +80,7 @@ export const useAuth = () => {
 
   const handleGoogleCallback = async () => {
     const { data, error } = await supabase.auth.getSession()
-    
+
     if (error) {
       throw new Error('Failed to get session from Google authentication')
     }
