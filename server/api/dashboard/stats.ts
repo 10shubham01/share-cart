@@ -11,9 +11,9 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const [totalGroups, totalItems, totalExpenses, monthlyExpenses] = await Promise.all([
+    const [totalFriends, totalItems, pendingRequests] = await Promise.all([
       supabase
-        .from('group_members')
+        .from('friends')
         .select('*', { count: 'exact', head: true })
         .eq('user_id', user.id)
         .eq('status', 'accepted'),
@@ -21,24 +21,16 @@ export default defineEventHandler(async (event) => {
         .from('grocery_items')
         .select('*', { count: 'exact', head: true }),
       supabase
-        .from('expenses')
-        .select('total_amount')
-        .eq('created_by', user.id),
-      supabase
-        .from('expenses')
-        .select('total_amount')
-        .eq('created_by', user.id)
-        .gte('purchase_date', new Date().toISOString().slice(0, 7) + '-01')
+        .from('friend_requests')
+        .select('*', { count: 'exact', head: true })
+        .eq('to_user_id', user.id)
+        .eq('status', 'pending')
     ])
 
-    const totalExpensesAmount = totalExpenses.data?.reduce((sum, expense) => sum + expense.total_amount, 0) || 0
-    const monthlySpending = monthlyExpenses.data?.reduce((sum, expense) => sum + expense.total_amount, 0) || 0
-
     return {
-      totalExpenses: totalExpensesAmount,
-      totalGroups: totalGroups.count || 0,
+      totalFriends: totalFriends.count || 0,
       totalItems: totalItems.count || 0,
-      monthlySpending
+      pendingRequests: pendingRequests.count || 0
     }
   } catch (error: any) {
     throw createError({ statusCode: 500, statusMessage: error.message })

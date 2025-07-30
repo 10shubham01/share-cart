@@ -8,9 +8,7 @@ const router = useRouter()
 const navigationItems = [
     { to: '/', icon: 'i-lucide-home', label: 'Home' },
     { to: '/groceries', icon: 'i-lucide-shopping-basket', label: 'Groceries' },
-    { to: '/groups', icon: 'i-lucide-users', label: 'Groups' },
-    { to: '/shopping-lists', icon: 'i-lucide-list', label: 'Lists' },
-    { to: '/expenses', icon: 'i-lucide-dollar-sign', label: 'Expenses' }
+    { to: '/friends', icon: 'i-lucide-users', label: 'Friends' }
 ]
 
 const getIndexFromRoute = () => navigationItems.findIndex(item => item.to === route.path)

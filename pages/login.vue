@@ -23,7 +23,8 @@ const handleSubmit = async () => {
       toast.add({ title: 'Success', description: 'Logged in successfully!', color: 'success' })
     }
 
-    await navigateTo('/groceries')
+    // Redirect to confirm page for profile sync
+    await navigateTo('/confirm')
   } catch (error: any) {
     toast.add({
       title: 'Error',
