@@ -96,7 +96,7 @@ DROP POLICY IF EXISTS "Users can delete friend requests they sent" ON public.fri
 
 CREATE POLICY "Users can view friend requests they sent or received" ON public.friend_requests FOR SELECT USING (auth.uid() = from_user_id OR auth.uid() = to_user_id);
 CREATE POLICY "Users can create friend requests" ON public.friend_requests FOR INSERT WITH CHECK (auth.uid() = from_user_id);
-CREATE POLICY "Users can update friend requests they received" ON public.friend_requests FOR UPDATE USING (auth.uid() = to_user_id);
+CREATE POLICY "Users can update friend requests they sent or received" ON public.friend_requests FOR UPDATE USING (auth.uid() = from_user_id OR auth.uid() = to_user_id);
 CREATE POLICY "Users can delete friend requests they sent" ON public.friend_requests FOR DELETE USING (auth.uid() = from_user_id);
 
 -- Step 8: Create function to handle user creation/updates

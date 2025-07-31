@@ -112,15 +112,20 @@ export default defineEventHandler(async (event) => {
         }
 
         // Get the friend request
-        const { data: request, error: getError } = await supabase
+        const { data: requests, error: getError } = await supabase
             .from('friend_requests')
             .select('*')
             .eq('id', request_id)
-            .single()
 
         if (getError) {
+            throw createError({ statusCode: 500, statusMessage: `Database error: ${getError.message}` })
+        }
+
+        if (!requests || requests.length === 0) {
             throw createError({ statusCode: 404, statusMessage: 'Friend request not found' })
         }
+
+        const request = requests[0]
 
         // Check permissions
         if (action === 'cancel' && request.from_user_id !== user.id) {
@@ -147,16 +152,21 @@ export default defineEventHandler(async (event) => {
                 newStatus = 'pending'
         }
 
-        const { data: updatedRequest, error: updateError } = await supabase
+        const { data: updatedRequests, error: updateError } = await supabase
             .from('friend_requests')
             .update({ status: newStatus, updated_at: new Date().toISOString() })
             .eq('id', request_id)
             .select()
-            .single()
 
         if (updateError) {
             throw createError({ statusCode: 500, statusMessage: updateError.message })
         }
+
+        if (!updatedRequests || updatedRequests.length === 0) {
+            throw createError({ statusCode: 404, statusMessage: 'Friend request not found or could not be updated' })
+        }
+
+        const updatedRequest = updatedRequests[0]
 
         // If accepted, create friend relationships
         if (action === 'accept') {
@@ -193,4 +203,5 @@ export default defineEventHandler(async (event) => {
     }
 
     throw createError({ statusCode: 405, statusMessage: 'Method not allowed' })
-}) 
+})
+
