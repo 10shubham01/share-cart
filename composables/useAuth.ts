@@ -58,10 +58,14 @@ export const useAuth = () => {
   const signInWithGoogle = async () => {
     const config = useAppConfig()
 
+    // Get the current URL to determine the redirect
+    const currentUrl = window.location.origin
+    const redirectUrl = `${currentUrl}/confirm`
+
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: 'https://share-cart-two.vercel.app/confirm',
+        redirectTo: redirectUrl,
       },
     })
 
