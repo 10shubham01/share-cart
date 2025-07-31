@@ -204,7 +204,7 @@ const confirmSelection = async () => {
                 title: 'Grocery Expense',
                 description: 'Shared grocery expense',
                 amount: props.groceryItems.reduce((total, item) => total + (item.default_price || 0), 0),
-                currency: 'USD',
+                currency: 'INR',
                 selectedFriends: selectedFriendIds.value,
                 items: props.groceryItems.map(item => ({
                     grocery_item_id: item.id,

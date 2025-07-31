@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS expenses (
     title VARCHAR(255) NOT NULL,
     description TEXT,
     amount DECIMAL(10,2) NOT NULL,
-    currency VARCHAR(3) DEFAULT 'USD',
+    currency VARCHAR(3) DEFAULT 'INR',
     category VARCHAR(100),
     created_by UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),

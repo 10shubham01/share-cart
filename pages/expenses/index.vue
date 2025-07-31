@@ -33,7 +33,8 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-600">Total Expenses</p>
-                            <p class="text-2xl font-bold text-gray-900">${{ totalAmount.toFixed(2) }}</p>
+                            <p class="text-2xl font-bold text-neutral-900 dark:text-white">₹{{ totalAmount.toFixed(2) }}
+                            </p>
                         </div>
                         <div class="p-3 bg-blue-100 rounded-xl">
                             <UIcon name="i-heroicons-currency-dollar" class="h-6 w-6 text-blue-600" />
@@ -46,7 +47,8 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-gray-600">This Month</p>
-                            <p class="text-2xl font-bold text-gray-900">${{ monthlyAmount.toFixed(2) }}</p>
+                            <p class="text-2xl font-bold text-neutral-900 dark:text-white">₹{{ monthlyAmount.toFixed(2)
+                            }}</p>
                         </div>
                         <div class="p-3 bg-green-100 rounded-xl">
                             <UIcon name="i-heroicons-calendar" class="h-6 w-6 text-green-600" />
@@ -222,9 +224,8 @@
                             <div
                                 class="flex items-center justify-between sm:flex-col sm:items-end sm:justify-start gap-3 sm:gap-2">
                                 <div class="text-right">
-                                    <div
-                                        class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-gray-900 to-blue-600 bg-clip-text text-transparent">
-                                        ${{ expense.amount.toFixed(2) }}
+                                    <div class="text-2xl sm:text-3xl font-bold gradient-text">
+                                        ₹{{ expense.amount.toFixed(2) }}
                                     </div>
                                     <div class="text-sm text-gray-500 font-medium">
                                         {{ expense.currency }}
@@ -283,13 +284,14 @@
                                                 <div class="min-w-0 flex-1">
                                                     <div class="text-sm font-semibold text-gray-900 truncate">{{
                                                         item.name }}</div>
-                                                    <div class="text-xs text-gray-500">
-                                                        {{ item.quantity }} × ${{ item.unit_price.toFixed(2) }}
+                                                    <div class="text-xs text-neutral-500 dark:text-neutral-400">
+                                                        {{ item.quantity }} × ₹{{ item.unit_price.toFixed(2) }}
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="text-sm font-bold text-gray-900 flex-shrink-0 ml-3">
-                                                ${{ item.total_price.toFixed(2) }}
+                                            <div
+                                                class="text-sm font-bold text-neutral-900 dark:text-white flex-shrink-0 ml-3">
+                                                ₹{{ item.total_price.toFixed(2) }}
                                             </div>
                                         </div>
                                     </TransitionGroup>

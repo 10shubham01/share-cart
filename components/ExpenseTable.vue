@@ -68,7 +68,7 @@
                                         @input="updateItemTotal(item)" />
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    ${{ item.totalPrice.toFixed(2) }}
+                                    ₹{{ item.totalPrice.toFixed(2) }}
                                 </td>
                             </tr>
                         </tbody>
@@ -78,7 +78,7 @@
                                     Total:
                                 </td>
                                 <td class="px-4 py-3 text-sm font-bold text-gray-900">
-                                    ${{ totalAmount.toFixed(2) }}
+                                    ₹{{ totalAmount.toFixed(2) }}
                                 </td>
                             </tr>
                         </tfoot>
@@ -129,7 +129,7 @@
             <div class="bg-blue-50 rounded-lg p-4">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-sm font-medium text-blue-900">Total Amount:</span>
-                    <span class="text-lg font-bold text-blue-900">${{ totalAmount.toFixed(2) }}</span>
+                    <span class="text-lg font-bold text-blue-900">₹{{ totalAmount.toFixed(2) }}</span>
                 </div>
                 <div class="flex items-center justify-between">
                     <span class="text-sm text-blue-700">Friends Involved:</span>
@@ -251,7 +251,7 @@ const createExpense = async () => {
                 title: expenseData.value.title,
                 description: expenseData.value.description,
                 amount: totalAmount.value,
-                currency: 'USD',
+                currency: 'INR',
                 selectedFriends: selectedFriends.value.map(f => f.friend?.id || f.friend_id),
                 items: itemsWithQuantities.value.map(item => ({
                     grocery_item_id: item.id,

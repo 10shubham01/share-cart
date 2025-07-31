@@ -53,7 +53,7 @@ export default defineEventHandler(async (event) => {
                 title,
                 description,
                 amount: parseFloat(amount),
-                currency: currency || 'USD',
+                currency: currency || 'INR',
                 category,
                 created_by: user.id
             })

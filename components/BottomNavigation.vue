@@ -8,7 +8,7 @@ const router = useRouter()
 const navigationItems = [
     { to: '/', icon: 'i-lucide-home', label: 'Home' },
     { to: '/groceries', icon: 'i-lucide-shopping-basket', label: 'Groceries' },
-    { to: '/expenses', icon: 'i-lucide-dollar-sign', label: 'Expenses' },
+    { to: '/expenses', icon: 'i-lucide-indian-rupee', label: 'Expenses' },
     { to: '/friends', icon: 'i-lucide-users', label: 'Friends' }
 ]
 

@@ -75,7 +75,7 @@ const getItemDetails = (expense: Expense) => {
     }
 
     return expense.expense_items
-        .map(item => `${item.name} (${item.quantity} × $${item.unit_price.toFixed(2)})`)
+        .map(item => `${item.name} (${item.quantity} × ₹${item.unit_price.toFixed(2)})`)
         .join('; ')
 }
 
@@ -103,10 +103,10 @@ const createSummarySheet = () => {
 
     const summaryData = [
         { 'Metric': 'Total Expenses', 'Value': props.expenses.length },
-        { 'Metric': 'Total Amount', 'Value': `$${totalAmount.toFixed(2)}` },
-        { 'Metric': 'Average Amount', 'Value': `$${avgAmount.toFixed(2)}` },
+        { 'Metric': 'Total Amount', 'Value': `₹${totalAmount.toFixed(2)}` },
+        { 'Metric': 'Average Amount', 'Value': `₹${avgAmount.toFixed(2)}` },
         { 'Metric': 'This Month Expenses', 'Value': monthlyExpenses.length },
-        { 'Metric': 'This Month Amount', 'Value': `$${monthlyAmount.toFixed(2)}` },
+        { 'Metric': 'This Month Amount', 'Value': `₹${monthlyAmount.toFixed(2)}` },
         { 'Metric': 'Total Items', 'Value': totalItems },
         { 'Metric': 'Unique Participants', 'Value': uniqueParticipants },
         { 'Metric': 'Total Participations', 'Value': totalParticipations },
