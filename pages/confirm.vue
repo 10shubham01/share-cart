@@ -7,10 +7,22 @@ watch(user, async () => {
   if (user.value) {
     try {
       // Sync user profile before redirecting
-      await $fetch('/api/auth/sync-profile', { method: 'POST' })
-      console.log('Profile synced successfully')
+      const syncData: any = {}
+
+      // If we have user metadata with name, pass it along
+      if (user.value?.user_metadata?.name) {
+        syncData.full_name = user.value.user_metadata.name
+      } else if (user.value?.user_metadata?.username) {
+        syncData.full_name = user.value.user_metadata.username
+      } else if (user.value?.user_metadata?.full_name) {
+        syncData.full_name = user.value.user_metadata.full_name
+      }
+
+      await $fetch('/api/auth/sync-profile', {
+        method: 'POST',
+        body: syncData
+      })
     } catch (syncError: any) {
-      console.warn('Profile sync failed:', syncError)
       error.value = 'Profile sync failed, but you can still use the app'
       // Don't block the redirect if sync fails
     } finally {

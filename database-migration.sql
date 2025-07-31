@@ -107,7 +107,13 @@ BEGIN
   VALUES (
     NEW.id,
     NEW.email,
-    COALESCE(NEW.raw_user_meta_data->>'full_name', NEW.raw_user_meta_data->>'name'),
+    COALESCE(
+      NEW.raw_user_meta_data->>'full_name',
+      NEW.raw_user_meta_data->>'name',
+      NEW.raw_user_meta_data->>'username',
+      NEW.raw_user_meta_data->>'user_name',
+      SPLIT_PART(NEW.email, '@', 1) -- Fallback to email prefix
+    ),
     NEW.raw_user_meta_data->>'avatar_url'
   )
   ON CONFLICT (id) DO UPDATE SET
@@ -139,7 +145,13 @@ INSERT INTO public.users (id, email, full_name, avatar_url)
 SELECT 
   id,
   email,
-  COALESCE(raw_user_meta_data->>'full_name', raw_user_meta_data->>'name'),
+  COALESCE(
+    raw_user_meta_data->>'full_name',
+    raw_user_meta_data->>'name',
+    raw_user_meta_data->>'username',
+    raw_user_meta_data->>'user_name',
+    SPLIT_PART(email, '@', 1) -- Fallback to email prefix
+  ),
   raw_user_meta_data->>'avatar_url'
 FROM auth.users
 ON CONFLICT (id) DO UPDATE SET

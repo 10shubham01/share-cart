@@ -28,12 +28,7 @@ type FriendRequest = Database['public']['Tables']['friend_requests']['Row'] & {
 const { user } = useAuth();
 const toast = useToast();
 
-// Redirect to login if not authenticated
-onMounted(() => {
-  if (!user.value) {
-    navigateTo('/login');
-  }
-});
+
 
 // Reactive data
 const friends = ref<Friend[]>([]);
@@ -375,6 +370,8 @@ onMounted(async () => {
   await fetchFriends();
   await fetchFriendRequests();
 });
+
+
 </script>
 
 <template>

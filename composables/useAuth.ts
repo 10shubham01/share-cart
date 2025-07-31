@@ -31,6 +31,12 @@ export const useAuth = () => {
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: form.email,
       password: form.password,
+      options: {
+        data: {
+          username: username,
+          full_name: form.fullName,
+        },
+      },
     })
 
     if (authError) {
