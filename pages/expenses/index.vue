@@ -3,7 +3,7 @@
         <!-- Enhanced Header -->
         <div class="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 sticky top-0 z-10">
             <div class="px-4 py-6 max-w-7xl mx-auto">
-                <div class="flex items-center justify-between">
+                <div class="flex sm:items-center sm:justify-between flex-col sm:flex-row ">
                     <div class="flex items-center gap-4">
                         <div class="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-lg">
                             <UIcon name="i-heroicons-currency-dollar" class="h-7 w-7 text-white" />
@@ -15,10 +15,6 @@
                             </h1>
                             <p class="text-gray-600 font-medium">Track and manage your shared expenses</p>
                         </div>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <ExcelExport :expenses="filteredExpenses" :loading="loading"
-                            :disabled="filteredExpenses.length === 0" />
                     </div>
                 </div>
             </div>
@@ -72,16 +68,12 @@
 
             <!-- Enhanced Filters Section -->
             <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-8">
-                <div class="flex items-center justify-between mb-6">
+                <div class="flex sm:items-center justify-between mb-6 flex-col sm:flex-row gap-4">
                     <div>
                         <h3 class="text-lg font-semibold text-gray-900">Filters</h3>
                         <p class="text-sm text-gray-600">Refine your expense list</p>
                     </div>
                     <div class="flex items-center gap-3">
-                        <div v-if="filteredExpenses.length > 0" class="text-sm text-gray-600">
-                            <span class="font-medium">{{ filteredExpenses.length }}</span>
-                            expense{{ filteredExpenses.length !== 1 ? 's' : '' }} found
-                        </div>
                         <ExcelExport :expenses="filteredExpenses" :loading="loading"
                             :disabled="filteredExpenses.length === 0" />
                         <UButton size="sm" variant="ghost" @click="clearFilters"
