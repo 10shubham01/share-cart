@@ -61,7 +61,7 @@ export const useAuth = () => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: 'http://localhost:3000/confirm',
+        redirectTo: 'https://share-cart-two.vercel.app/confirm',
       },
     })
 
