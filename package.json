@@ -12,6 +12,7 @@
     "@formkit/auto-animate": "^0.8.2",
     "@iconify-json/lucide": "^1.2.53",
     "@iconify-json/simple-icons": "^1.2.40",
+    "@internationalized/date": "^3.8.2",
     "@nuxt/eslint": "1.4.1",
     "@nuxt/ui": "^3.2.0",
     "@nuxtjs/supabase": "1.5.3",
