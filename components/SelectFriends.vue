@@ -87,6 +87,14 @@ interface Emits {
     (e: 'cancel'): void
 }
 
+interface Props {
+    groceryItems?: any[]
+}
+
+const props = withDefaults(defineProps<Props>(), {
+    groceryItems: () => []
+})
+
 const emit = defineEmits<Emits>()
 
 const model = defineModel<boolean>({
@@ -185,11 +193,54 @@ const fetchFriends = async () => {
     }
 }
 
-const confirmSelection = () => {
+const confirmSelection = async () => {
     if (selectedFriendIds.value.length === 0) return
 
-    emit('confirm', selectedFriends.value)
-    closeDrawer()
+    // Create expense with selected friends and grocery items
+    try {
+        const { data, error } = await useFetch('/api/expenses', {
+            method: 'POST',
+            body: {
+                title: 'Grocery Expense',
+                description: 'Shared grocery expense',
+                amount: props.groceryItems.reduce((total, item) => total + (item.default_price || 0), 0),
+                currency: 'USD',
+                selectedFriends: selectedFriendIds.value,
+                items: props.groceryItems.map(item => ({
+                    grocery_item_id: item.id,
+                    name: item.name,
+                    quantity: 1,
+                    unit_price: item.default_price || 0,
+                    total_price: item.default_price || 0,
+                    notes: null
+                }))
+            }
+        })
+
+        if (error.value) {
+            throw new Error(error.value.message)
+        }
+
+        // Show success message
+        toast.add({
+            title: 'Success',
+            description: 'Expense created successfully!',
+            color: 'success'
+        })
+
+        // Emit confirm event with selected friends
+        emit('confirm', selectedFriends.value)
+        closeDrawer()
+
+        // Navigate to expenses page
+        navigateTo('/expenses')
+    } catch (err: any) {
+        toast.add({
+            title: 'Error',
+            description: err.message || 'Failed to create expense',
+            color: 'error'
+        })
+    }
 }
 
 const closeDrawer = () => {

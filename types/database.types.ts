@@ -123,6 +123,111 @@ export interface Database {
           updated_at?: string
         }
       }
+      expenses: {
+        Row: {
+          id: string
+          title: string
+          description: string | null
+          amount: number
+          currency: string
+          created_by: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          description?: string | null
+          amount: number
+          currency?: string
+          created_by: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          description?: string | null
+          amount?: number
+          currency?: string
+          created_by?: string
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      expense_shares: {
+        Row: {
+          id: string
+          expense_id: string
+          user_id: string
+          friend_id: string
+          share_amount: number | null
+          share_percentage: number | null
+          status: 'pending' | 'accepted' | 'rejected' | 'paid'
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          expense_id: string
+          user_id: string
+          friend_id: string
+          share_amount?: number | null
+          share_percentage?: number | null
+          status?: 'pending' | 'accepted' | 'rejected' | 'paid'
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          expense_id?: string
+          user_id?: string
+          friend_id?: string
+          share_amount?: number | null
+          share_percentage?: number | null
+          status?: 'pending' | 'accepted' | 'rejected' | 'paid'
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      expense_items: {
+        Row: {
+          id: string
+          expense_id: string
+          grocery_item_id: string | null
+          name: string
+          quantity: number
+          unit_price: number
+          total_price: number
+          notes: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          expense_id: string
+          grocery_item_id?: string | null
+          name: string
+          quantity?: number
+          unit_price: number
+          total_price: number
+          notes?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          expense_id?: string
+          grocery_item_id?: string | null
+          name?: string
+          quantity?: number
+          unit_price?: number
+          total_price?: number
+          notes?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
 
 
     }

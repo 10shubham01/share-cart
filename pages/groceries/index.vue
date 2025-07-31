@@ -172,13 +172,17 @@
   </div>
 
   <div class="fixed bottom-38 right-2 z-50">
-    <UButton color="primary" size="xl" icon="i-lucide-share" @click="showSelectFriends = !showSelectFriends">
+    <UButton color="primary" size="xl" icon="i-lucide-share" @click="showSelectFriends = !showSelectFriends"
+      :disabled="selectedItems.length === 0">
       <span class="font-medium">{{ selectedItems.length }}</span>
     </UButton>
   </div>
 
   <GroceryItem v-model="showAddModal" :item="editingItem" @saved="handleItemSaved" @cancelled="handleCancelled" />
-  <SelectFriends v-model="showSelectFriends" />
+
+  <!-- Select Friends Drawer -->
+  <SelectFriends v-model="showSelectFriends" :grocery-items="selectedGroceryItems" @confirm="handleFriendsSelected"
+    @cancel="showSelectFriends = false" />
 </template>
 
 <script lang="ts" setup>
@@ -202,6 +206,10 @@ const displayGroceries = computed(() => {
     return filteredGroceries.value
   }
   return groceries.value
+})
+
+const selectedGroceryItems = computed(() => {
+  return groceries.value.filter(item => selectedItems.value.includes(item.id))
 })
 
 // Format price to 2 decimal places
@@ -276,6 +284,24 @@ function handleItemSaved(item: Database['public']['Tables']['grocery_items']['Ro
 function handleCancelled() {
   // Reset editing item
   editingItem.value = null;
+}
+
+function handleFriendsSelected(selectedFriends: any[]) {
+  // Show success message
+  useToast().add({
+    title: 'Success',
+    description: `Selected ${selectedFriends.length} friends for expense sharing!`,
+    color: 'success'
+  });
+
+  // Close the select friends drawer
+  showSelectFriends.value = false;
+
+  // Clear selected items
+  selectedItems.value = [];
+
+  // Navigate to expenses page
+  navigateTo('/expenses');
 }
 
 function editItem(item: Database['public']['Tables']['grocery_items']['Row']) {
