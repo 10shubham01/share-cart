@@ -60,10 +60,7 @@ const indicatorStyle = computed(() => {
     max-width: 400px;
     height: 70px;
     background: var(--ui-color-primary-500);
-    position: fixed;
-    left: 50%;
-    bottom: 0;
-    transform: translateX(-50%);
+
     display: flex;
     justify-content: center;
     align-items: center;

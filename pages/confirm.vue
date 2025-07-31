@@ -6,7 +6,7 @@ const error = ref<string | null>(null)
 watch(user, async () => {
   if (user.value) {
     try {
-      // Sync user profile before redirecting
+
       const syncData: any = {}
 
       // If we have user metadata with name, pass it along
@@ -27,10 +27,6 @@ watch(user, async () => {
       // Don't block the redirect if sync fails
     } finally {
       loading.value = false
-      // Redirect to dashboard after a short delay to show sync status
-      setTimeout(() => {
-        navigateTo('/')
-      }, 1000)
     }
   }
 }, { immediate: true })

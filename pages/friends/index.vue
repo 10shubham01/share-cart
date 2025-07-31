@@ -370,10 +370,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="relative">
-    <!-- Sticky Header -->
+  <div>
     <div
-      class="sticky top-0 z-50 bg-gradient-to-r from-white via-white to-primary-50/30 backdrop-blur-md border-b border-gray-200/50 py-6 w-full shadow-sm">
+      class="bg-gradient-to-r from-white via-white to-primary-50/30 backdrop-blur-md border-b border-gray-200/50 py-6 w-full shadow-sm">
       <div class="flex justify-between flex-col sm:flex-row px-4 max-w-7xl mx-auto">
         <div class="flex-1">
           <div class="flex items-center gap-3 mb-4">
@@ -621,18 +620,15 @@ onMounted(async () => {
           <UButton icon="i-heroicons-x-mark" variant="ghost" size="sm" @click="closeAddFriendModal" />
         </div>
       </template>
-
       <template #body>
         <form @submit.prevent="addFriend" class="space-y-6">
           <UFormField label="Friend's Email" required>
             <UInput v-model="newFriendEmail" placeholder="Enter friend's email address" required type="email" />
           </UFormField>
-
           <UFormField label="Message (Optional)">
             <UTextarea v-model="newFriendMessage" placeholder="Add a personal message to your friend request"
               class="w-full" :rows="3" />
           </UFormField>
-
           <div class="flex justify-end gap-3 pt-4">
             <UButton variant="outline" @click="closeAddFriendModal">
               Cancel

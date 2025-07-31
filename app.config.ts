@@ -7,7 +7,7 @@ export default defineAppConfig({
     formField: {
       slots: { root: "w-full" },
       defaultVariants: {
-        size: "md",
+        size: 'sm',
       }
     },
     input: {
@@ -15,7 +15,7 @@ export default defineAppConfig({
         root: "!w-full",
       },
       defaultVariants: {
-        size: 'md',
+        size: 'sm',
       }
     },
     selectMenu: {
@@ -23,7 +23,7 @@ export default defineAppConfig({
         base: "!w-full",
       },
       defaultVariants: {
-        size: 'md',
+        size: 'sm',
       }
     },
     inputNumber: {
@@ -31,12 +31,12 @@ export default defineAppConfig({
         root: "!w-full",
       },
       defaultVariants: {
-        size: 'md',
+        size: 'sm',
       }
     },
     button: {
       defaultVariants: {
-        size: 'md',
+        size: 'sm',
       }
     }
   },
@@ -46,10 +46,7 @@ export default defineAppConfig({
       base: "!w-full",
     },
     defaultVariants: {
-      size: 'md',
+      size: 'sm',
     }
-  },
-  oauth: {
-    redirectUrl: "https://share-cart-two.vercel.app/confirm"
   },
 });
