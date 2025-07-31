@@ -6,10 +6,7 @@ const error = ref<string | null>(null)
 watch(user, async () => {
   if (user.value) {
     try {
-
       const syncData: any = {}
-
-      // If we have user metadata with name, pass it along
       if (user.value?.user_metadata?.name) {
         syncData.full_name = user.value.user_metadata.name
       } else if (user.value?.user_metadata?.username) {
@@ -24,7 +21,6 @@ watch(user, async () => {
       })
     } catch (syncError: any) {
       error.value = 'Profile sync failed, but you can still use the app'
-      // Don't block the redirect if sync fails
     } finally {
       loading.value = false
     }

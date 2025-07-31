@@ -172,12 +172,13 @@
   </div>
 
   <div class="fixed bottom-38 right-2 z-50">
-    <UButton color="primary" size="xl" icon="i-lucide-share">
+    <UButton color="primary" size="xl" icon="i-lucide-share" @click="showSelectFriends = !showSelectFriends">
       <span class="font-medium">{{ selectedItems.length }}</span>
     </UButton>
   </div>
 
   <GroceryItem v-model="showAddModal" :item="editingItem" @saved="handleItemSaved" @cancelled="handleCancelled" />
+  <SelectFriends v-model="showSelectFriends" />
 </template>
 
 <script lang="ts" setup>
@@ -193,6 +194,7 @@ const selectedItems = ref<string[]>([]);
 const viewMode = ref<'grid' | 'list'>('grid');
 const isEditMode = ref(false);
 const searchQuery = ref('')
+const showSelectFriends = ref(false);
 
 // Computed properties
 const displayGroceries = computed(() => {
