@@ -209,125 +209,134 @@
                                 </p>
                                 <div
                                     class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 text-sm text-gray-500">
-                                </div>
-                                <div
-                                    class="flex items-center justify-between sm:flex-col sm:items-end sm:justify-start gap-3 sm:gap-2">
-                                    <div class="text-right">
-                                        <div
-                                            class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-gray-900 to-blue-600 bg-clip-text text-transparent">
-                                            ${{ expense.amount.toFixed(2) }}
-                                        </div>
-                                        <div class="text-sm text-gray-500 font-medium">
-                                            {{ expense.currency }}
-                                        </div>
-                                    </div>
-                                    <UButton size="sm" variant="ghost" color="red" @click="deleteExpense(expense.id)"
-                                        icon="i-heroicons-trash"
-                                        class="sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex-shrink-0" />
+                                    <span class="flex items-center gap-2">
+                                        <UIcon name="i-heroicons-calendar" class="h-4 w-4" />
+                                        {{ formatDate(expense.created_at) }}
+                                    </span>
+                                    <span class="flex items-center gap-2">
+                                        <UIcon name="i-heroicons-users" class="h-4 w-4" />
+                                        {{ expense.expense_shares?.length || 0 }} participants
+                                    </span>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- Collapsible Items Section -->
-                        <div v-if="expense.expense_items && expense.expense_items.length > 0"
-                            class="border-b border-gray-100">
-                            <button @click="toggleItems(expense.id)"
-                                class="w-full p-4 sm:p-6 text-left hover:bg-gray-50 transition-colors duration-200">
-                                <div class="flex items-center justify-between">
-                                    <h4 class="text-sm font-semibold text-gray-900 flex items-center gap-2">
-                                        <UIcon name="i-heroicons-shopping-bag" class="h-4 w-4 text-gray-500" />
-                                        Items ({{ expense.expense_items.length }})
-                                    </h4>
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-xs text-gray-500 font-medium hidden sm:inline">
-                                            {{ isItemsExpanded(expense.id) ? 'Hide' : 'Show' }} details
-                                        </span>
-                                        <UIcon name="i-heroicons-chevron-down"
-                                            class="h-4 w-4 text-gray-500 transition-transform duration-300"
-                                            :class="{ 'rotate-180': isItemsExpanded(expense.id) }" />
+                            <div
+                                class="flex items-center justify-between sm:flex-col sm:items-end sm:justify-start gap-3 sm:gap-2">
+                                <div class="text-right">
+                                    <div
+                                        class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-gray-900 to-blue-600 bg-clip-text text-transparent">
+                                        ${{ expense.amount.toFixed(2) }}
+                                    </div>
+                                    <div class="text-sm text-gray-500 font-medium">
+                                        {{ expense.currency }}
                                     </div>
                                 </div>
-                            </button>
-
-                            <!-- Collapsible Content -->
-                            <Transition enter-active-class="transition-all duration-300 ease-out"
-                                enter-from-class="opacity-0 max-h-0" enter-to-class="opacity-100 max-h-96"
-                                leave-active-class="transition-all duration-300 ease-in"
-                                leave-from-class="opacity-100 max-h-96" leave-to-class="opacity-0 max-h-0">
-                                <div v-show="isItemsExpanded(expense.id)" class="px-4 sm:px-6 pb-4 sm:pb-6">
-                                    <div class="space-y-3">
-                                        <TransitionGroup enter-active-class="transition-all duration-300 ease-out"
-                                            enter-from-class="opacity-0 transform translate-y-4"
-                                            enter-to-class="opacity-100 transform translate-y-0"
-                                            leave-active-class="transition-all duration-200 ease-in"
-                                            leave-from-class="opacity-100 transform translate-y-0"
-                                            leave-to-class="opacity-0 transform translate-y-4">
-                                            <div v-for="(item, index) in expense.expense_items" :key="item.id"
-                                                class="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-200"
-                                                :style="{ animationDelay: `${index * 50}ms` }">
-                                                <div class="flex items-center gap-3 min-w-0 flex-1">
-                                                    <div
-                                                        class="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-lg flex items-center justify-center shadow-sm flex-shrink-0">
-                                                        <UIcon name="i-heroicons-shopping-cart"
-                                                            class="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />
-                                                    </div>
-                                                    <div class="min-w-0 flex-1">
-                                                        <div class="text-sm font-semibold text-gray-900 truncate">{{
-                                                            item.name }}</div>
-                                                        <div class="text-xs text-gray-500">
-                                                            {{ item.quantity }} × ${{ item.unit_price.toFixed(2) }}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="text-sm font-bold text-gray-900 flex-shrink-0 ml-3">
-                                                    ${{ item.total_price.toFixed(2) }}
-                                                </div>
-                                            </div>
-                                        </TransitionGroup>
-                                    </div>
-                                </div>
-                            </Transition>
-                        </div>
-
-                        <!-- Enhanced Participants Section -->
-                        <div v-if="expense.expense_shares && expense.expense_shares.length > 0" class="p-4 sm:p-6">
-                            <h4 class="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                                <UIcon name="i-heroicons-user-group" class="h-4 w-4 text-gray-500" />
-                                Participants ({{ expense.expense_shares.length }})
-                            </h4>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                                <TransitionGroup enter-active-class="transition-all duration-300 ease-out"
-                                    enter-from-class="opacity-0 transform scale-95"
-                                    enter-to-class="opacity-100 transform scale-100"
-                                    leave-active-class="transition-all duration-200 ease-in"
-                                    leave-from-class="opacity-100 transform scale-100"
-                                    leave-to-class="opacity-0 transform scale-95">
-                                    <div v-for="(share, index) in expense.expense_shares" :key="share.id"
-                                        class="flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl border border-gray-100 hover:border-blue-200 transition-all duration-200"
-                                        :style="{ animationDelay: `${index * 100}ms` }">
-                                        <div class="flex items-center gap-3 min-w-0 flex-1">
-                                            <UAvatar :src="share.friend?.avatar_url" :alt="getFriendName(share.friend)"
-                                                size="sm" class="ring-2 ring-white shadow-sm flex-shrink-0" />
-                                            <div class="min-w-0 flex-1">
-                                                <div class="text-sm font-semibold text-gray-900 truncate">
-                                                    {{ getFriendName(share.friend) }}
-                                                </div>
-                                                <div class="text-xs text-gray-500 font-medium">
-                                                    Participant
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="text-xs text-gray-400 flex-shrink-0 ml-2">
-                                            <UIcon name="i-heroicons-check-circle" class="h-4 w-4 text-green-500" />
-                                        </div>
-                                    </div>
-                                </TransitionGroup>
+                                <UButton size="sm" variant="ghost" color="red" @click="deleteExpense(expense.id)"
+                                    icon="i-heroicons-trash"
+                                    class="sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex-shrink-0" />
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Collapsible Items Section -->
+                    <div v-if="expense.expense_items && expense.expense_items.length > 0"
+                        class="border-b border-gray-100">
+                        <button @click="toggleItems(expense.id)"
+                            class="w-full p-4 sm:p-6 text-left hover:bg-gray-50 transition-colors duration-200">
+                            <div class="flex items-center justify-between">
+                                <h4 class="text-sm font-semibold text-gray-900 flex items-center gap-2">
+                                    <UIcon name="i-heroicons-shopping-bag" class="h-4 w-4 text-gray-500" />
+                                    Items ({{ expense.expense_items.length }})
+                                </h4>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs text-gray-500 font-medium hidden sm:inline">
+                                        {{ isItemsExpanded(expense.id) ? 'Hide' : 'Show' }} details
+                                    </span>
+                                    <UIcon name="i-heroicons-chevron-down"
+                                        class="h-4 w-4 text-gray-500 transition-transform duration-300"
+                                        :class="{ 'rotate-180': isItemsExpanded(expense.id) }" />
+                                </div>
+                            </div>
+                        </button>
+
+                        <!-- Collapsible Content -->
+                        <Transition enter-active-class="transition-all duration-300 ease-out"
+                            enter-from-class="opacity-0 max-h-0" enter-to-class="opacity-100 max-h-96"
+                            leave-active-class="transition-all duration-300 ease-in"
+                            leave-from-class="opacity-100 max-h-96" leave-to-class="opacity-0 max-h-0">
+                            <div v-show="isItemsExpanded(expense.id)" class="px-4 sm:px-6 pb-4 sm:pb-6">
+                                <div class="space-y-3">
+                                    <TransitionGroup enter-active-class="transition-all duration-300 ease-out"
+                                        enter-from-class="opacity-0 transform translate-y-4"
+                                        enter-to-class="opacity-100 transform translate-y-0"
+                                        leave-active-class="transition-all duration-200 ease-in"
+                                        leave-from-class="opacity-100 transform translate-y-0"
+                                        leave-to-class="opacity-0 transform translate-y-4">
+                                        <div v-for="(item, index) in expense.expense_items" :key="item.id"
+                                            class="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-200"
+                                            :style="{ animationDelay: `${index * 50}ms` }">
+                                            <div class="flex items-center gap-3 min-w-0 flex-1">
+                                                <div
+                                                    class="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-lg flex items-center justify-center shadow-sm flex-shrink-0">
+                                                    <UIcon name="i-heroicons-shopping-cart"
+                                                        class="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />
+                                                </div>
+                                                <div class="min-w-0 flex-1">
+                                                    <div class="text-sm font-semibold text-gray-900 truncate">{{
+                                                        item.name }}</div>
+                                                    <div class="text-xs text-gray-500">
+                                                        {{ item.quantity }} × ${{ item.unit_price.toFixed(2) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="text-sm font-bold text-gray-900 flex-shrink-0 ml-3">
+                                                ${{ item.total_price.toFixed(2) }}
+                                            </div>
+                                        </div>
+                                    </TransitionGroup>
+                                </div>
+                            </div>
+                        </Transition>
+                    </div>
+
+                    <!-- Enhanced Participants Section -->
+                    <div v-if="expense.expense_shares && expense.expense_shares.length > 0" class="p-4 sm:p-6">
+                        <h4 class="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                            <UIcon name="i-heroicons-user-group" class="h-4 w-4 text-gray-500" />
+                            Participants ({{ expense.expense_shares.length }})
+                        </h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                            <TransitionGroup enter-active-class="transition-all duration-300 ease-out"
+                                enter-from-class="opacity-0 transform scale-95"
+                                enter-to-class="opacity-100 transform scale-100"
+                                leave-active-class="transition-all duration-200 ease-in"
+                                leave-from-class="opacity-100 transform scale-100"
+                                leave-to-class="opacity-0 transform scale-95">
+                                <div v-for="(share, index) in expense.expense_shares" :key="share.id"
+                                    class="flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl border border-gray-100 hover:border-blue-200 transition-all duration-200"
+                                    :style="{ animationDelay: `${index * 100}ms` }">
+                                    <div class="flex items-center gap-3 min-w-0 flex-1">
+                                        <UAvatar :src="share.friend?.avatar_url" :alt="getFriendName(share.friend)"
+                                            size="sm" class="ring-2 ring-white shadow-sm flex-shrink-0" />
+                                        <div class="min-w-0 flex-1">
+                                            <div class="text-sm font-semibold text-gray-900 truncate">
+                                                {{ getFriendName(share.friend) }}
+                                            </div>
+                                            <div class="text-xs text-gray-500 font-medium">
+                                                Participant
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-xs text-gray-400 flex-shrink-0 ml-2">
+                                        <UIcon name="i-heroicons-check-circle" class="h-4 w-4 text-green-500" />
+                                    </div>
+                                </div>
+                            </TransitionGroup>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 </template>
 
 <script setup lang="ts">
