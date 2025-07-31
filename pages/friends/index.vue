@@ -630,7 +630,7 @@ onMounted(async () => {
 
           <UFormField label="Message (Optional)">
             <UTextarea v-model="newFriendMessage" placeholder="Add a personal message to your friend request"
-              :rows="3" />
+              class="w-full" :rows="3" />
           </UFormField>
 
           <div class="flex justify-end gap-3 pt-4">

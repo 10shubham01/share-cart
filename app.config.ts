@@ -7,7 +7,7 @@ export default defineAppConfig({
     formField: {
       slots: { root: "w-full" },
       defaultVariants: {
-        size: "xl",
+        size: "md",
       }
     },
     input: {
@@ -15,7 +15,7 @@ export default defineAppConfig({
         root: "!w-full",
       },
       defaultVariants: {
-        size: 'xl',
+        size: 'md',
       }
     },
     selectMenu: {
@@ -23,7 +23,7 @@ export default defineAppConfig({
         base: "!w-full",
       },
       defaultVariants: {
-        size: 'xl',
+        size: 'md',
       }
     },
     inputNumber: {
@@ -31,13 +31,22 @@ export default defineAppConfig({
         root: "!w-full",
       },
       defaultVariants: {
-        size: 'xl',
+        size: 'md',
       }
     },
     button: {
       defaultVariants: {
-        size: 'xl',
+        size: 'md',
       }
+    }
+  },
+  textarea: {
+    slots: {
+      root: "!w-full",
+      base: "!w-full",
+    },
+    defaultVariants: {
+      size: 'md',
     }
   },
   oauth: {
