@@ -3,7 +3,7 @@
 A comprehensive web application for managing group grocery shopping, expense tracking, and expense sharing built with Nuxt 3, Supabase, and Nuxt UI.
 
 ## Features
-
+update
 ### 🔐 User Authentication
 - **Email/Password Registration & Login**: Secure user registration and authentication
 - **Google OAuth Integration**: One-click sign-in with Google accounts
